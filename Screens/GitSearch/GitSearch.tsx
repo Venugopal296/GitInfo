@@ -35,7 +35,6 @@ const GitSearch: React.FC<GitSearchProps> = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const { width , height } = useWindowDimensions();
-  console.log(width, height); 
 
   useEffect(() => {
     (async () => {
