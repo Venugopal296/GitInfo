@@ -1,6 +1,6 @@
-import { ConstantInterface } from '../Interfaces/Interfaces';
+import { ConstantVariableType } from '../Interfaces/Interfaces';
 
-const Colors: ConstantInterface = {
+const Colors: ConstantVariableType = {
     primary: '#7a0046',
     secondary: '#fff',
     tertiary: '#000000'

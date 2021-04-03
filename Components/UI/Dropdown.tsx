@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
-import { DropdownInterface } from '../../Interfaces/Interfaces';
 
 const sports = [
   {
@@ -17,6 +16,11 @@ const sports = [
     value: 'hockey',
   },
 ];
+
+type DropdownInterface = {
+  searchBy: string;
+  setSearchBy: (a: string) => void;
+}
 
 const Dropdown: React.FC<DropdownInterface> = ({searchBy, setSearchBy}) => {
   const placeholder = {

@@ -4,13 +4,11 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { GitInfoInterface } from '../../Interfaces/Interfaces';
 import Colors from '../../Constants/Colors';
 
-interface navigateInterface {
-  navigate: (a: string, b: { url: string | undefined }) => void;
+interface VisitInterface {
+  vistRepos: () => void;
 }
 
-type combined = GitInfoInterface & navigateInterface;
-
-const GitInfo: React.FC<combined> = ({
+const GitInfo: React.FC<GitInfoInterface & VisitInterface> = ({
   name,
   bio,
   email,
@@ -18,21 +16,16 @@ const GitInfo: React.FC<combined> = ({
   avatar_url,
   login,
   public_repos,
-  repos_url,
-  navigate,
+  vistRepos
 }) => {
-  const visitRepo = () => {
-    navigate('Git Detail', { url: repos_url });
-  };
-
   return (
     <View style={Styles.infoContainer}>
       <View style={Styles.imgOuterContainer}>
         <View style={Styles.imgContainer}>
-          <Image
+          {avatar_url !== '' && <Image
             source={{ uri: avatar_url }}
             style={{ width: 150, height: 150 }}
-          />
+          />}
         </View>
         <View style={Styles.nameBioContainer}>
           {name !== null ? (
@@ -73,14 +66,14 @@ const GitInfo: React.FC<combined> = ({
       </View>
       <View style={Styles.repoOuterBoxContainer}>
         <View style={Styles.repoCountBoxContainer}>
-          <Text style={Styles.headerText}>Public Repo's</Text>
+          <Text style={Styles.headerText}>Total Repo's</Text>
           <Text style={Styles.repoCountValue}>{public_repos}</Text>
         </View>
         <TouchableOpacity
-          onPress={visitRepo}
+          onPress={vistRepos}
           style={Styles.repoVisitBoxContainer}
         >
-          <Text style={Styles.headerText}>Visit Repo's</Text>
+          <Text style={{...Styles.headerText, color: 'white'}}>Visit Repo's</Text>
           <Icon name="chevron-forward-outline" color="white" size={30} />
         </TouchableOpacity>
       </View>
@@ -174,7 +167,7 @@ const Styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '600',
     paddingVertical: 5,
-    color: 'white',
+    color: '#ff8c1a',
   },
   bodyText: {
     fontSize: 18,

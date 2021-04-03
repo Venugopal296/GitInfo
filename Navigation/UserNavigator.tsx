@@ -1,12 +1,16 @@
 import React from 'react';
-import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  StackNavigationOptions,
+} from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import Colors from '../Constants/Colors';
-import GitSearch from '../Screens/GitSearch/GitSearch';
+import GitSearch, {gitSearchOptions} from '../Screens/GitSearch/GitSearch';
 import History from '../Screens/History/History';
-import GitDetail from '../Screens/GitDetail/GitDetail';
+import GitDetail, { gitDetailOptions } from '../Screens/GitDetail/GitDetail';
+import { HistoryNavigatorParamList, SearchNavigatorParamList } from '../Interfaces/Interfaces';
 
 const defaultStackNavOptions: StackNavigationOptions = {
   headerStyle: {
@@ -22,31 +26,26 @@ const defaultStackNavOptions: StackNavigationOptions = {
 
 const SearchNavigator = createStackNavigator();
 
-export const GitSearchNavigator = () => {
+export const GitSearchNavigator: React.FC = () => {
+  const { Navigator, Screen } = SearchNavigator;
+
   return (
-    <SearchNavigator.Navigator screenOptions={defaultStackNavOptions}>
-      <SearchNavigator.Screen
-        name="Git Search"
-        component={GitSearch}
-      />
-      <SearchNavigator.Screen
-        name="Git Detail"
-        component={GitDetail}
-      />
-    </SearchNavigator.Navigator>
+    <Navigator screenOptions={defaultStackNavOptions}>
+      <Screen name="GitSearch" component={GitSearch} options={gitSearchOptions} />
+      <Screen name="GitDetail" component={GitDetail} options={gitDetailOptions} />
+    </Navigator>
   );
 };
 
 const HistoryNavigator = createStackNavigator();
 
-export const SearchHistoryNavigator = () => {
+export const SearchHistoryNavigator: React.FC = () => {
+  const { Navigator, Screen } = HistoryNavigator;
   return (
-    <HistoryNavigator.Navigator screenOptions={defaultStackNavOptions}>
-      <HistoryNavigator.Screen
-        name="History"
-        component={History}
-      />
-    </HistoryNavigator.Navigator>
+    <Navigator screenOptions={defaultStackNavOptions}>
+      <Screen name="History" component={History} />
+      <Screen name="GitDetail" component={GitDetail} options={gitDetailOptions} />
+    </Navigator>
   );
 };
 
@@ -54,9 +53,10 @@ export const SearchHistoryNavigator = () => {
 
 const TabNavigator = createBottomTabNavigator();
 
-export const GitTabNavigator = () => {
+export const GitTabNavigator: React.FC = () => {
+  const { Navigator, Screen } = TabNavigator;
   return (
-    <TabNavigator.Navigator
+    <Navigator
       tabBarOptions={{
         activeTintColor: Colors.primary,
         labelStyle: {
@@ -65,7 +65,7 @@ export const GitTabNavigator = () => {
         labelPosition: 'below-icon',
       }}
     >
-      <TabNavigator.Screen
+      <Screen
         name="Search Repo"
         component={GitSearchNavigator}
         options={{
@@ -74,7 +74,7 @@ export const GitTabNavigator = () => {
           ),
         }}
       />
-      <TabNavigator.Screen
+      <Screen
         name="History"
         component={SearchHistoryNavigator}
         options={{
@@ -83,22 +83,6 @@ export const GitTabNavigator = () => {
           ),
         }}
       />
-    </TabNavigator.Navigator>
+    </Navigator>
   );
 };
-
-// /* Authentication Navigation */
-
-// const LoginNavigator = createStackNavigator();
-
-// export const LoginAuthNavigator = () => {
-//   return (
-//     <LoginNavigator.Navigator screenOptions={defaultStackNavOptions}>
-//       <LoginNavigator.Screen
-//         name="Login"
-//         component={Login}
-//         options={loginScreenOptions}
-//       />
-//     </LoginNavigator.Navigator>
-//   );
-// };

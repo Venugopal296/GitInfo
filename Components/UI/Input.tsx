@@ -13,7 +13,8 @@ const Input: React.FC<inputInterface> = ({inputValue, setInputValue}) => {
         style={Styles.input}
         onChangeText={setInputValue}
         value={inputValue}
-        placeholder="Enter user..."
+        placeholder="Enter Username..."
+        placeholderTextColor="gray"
       />
     </View>
   );
@@ -22,7 +23,6 @@ const Input: React.FC<inputInterface> = ({inputValue, setInputValue}) => {
 const Styles = StyleSheet.create({
   input: {
     height: 45,
-    marginTop: 15,
     borderWidth: 1,
     borderColor: 'gray',
     borderStyle: 'solid',
