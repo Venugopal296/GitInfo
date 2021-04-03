@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image, Text, View, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { GitInfoInterface } from '../../Interfaces/Interfaces';
 import Colors from '../../Constants/Colors';
@@ -16,64 +16,70 @@ const GitInfo: React.FC<GitInfoInterface & VisitInterface> = ({
   avatar_url,
   login,
   public_repos,
-  vistRepos
+  vistRepos,
 }) => {
+  const { width , height } = useWindowDimensions();
+  
   return (
-    <View style={Styles.infoContainer}>
-      <View style={Styles.imgOuterContainer}>
-        <View style={Styles.imgContainer}>
-          {avatar_url !== '' && <Image
-            source={{ uri: avatar_url }}
-            style={{ width: 150, height: 150 }}
-          />}
+    <View style={Styles().infoContainer}>
+      <View style={Styles().imgOuterContainer}>
+        <View style={Styles(height).imgContainer}>
+          {avatar_url !== '' && (
+            <Image
+              source={{ uri: avatar_url }}
+              style={{ width: height < 737 ? 80 : 175, height: height < 737 ? 80 : 175 }}
+            />
+          )}
         </View>
-        <View style={Styles.nameBioContainer}>
+        <View style={Styles().nameBioContainer}>
           {name !== null ? (
-            <Text style={Styles.name}>{name}</Text>
+            <Text style={Styles().name}>{name}</Text>
           ) : (
-            <Text style={{ ...Styles.name, ...Styles.noTextValue }}>
+            <Text style={{ ...Styles().name, ...Styles().noTextValue }}>
               No name
             </Text>
           )}
-          <Text style={Styles.bio}>{bio}</Text>
+          <Text style={Styles().bio}>{bio}</Text>
         </View>
       </View>
-      <View style={Styles.boxContainer}>
+      <View style={Styles(height).boxContainer}>
         <View style={{ marginBottom: 10 }}>
-          <Text style={Styles.headerText}>Github Link</Text>
+          <Text style={Styles().headerText}>Github Link</Text>
         </View>
         <View>
-          <Text style={{ ...Styles.bodyText, ...Styles.link }}>{html_url}</Text>
+          <Text style={{ ...Styles().bodyText, ...Styles().link }}>{html_url}</Text>
         </View>
       </View>
-      <View style={Styles.boxContainer}>
+      <View style={Styles(height).boxContainer}>
         <View style={{ marginBottom: 10 }}>
-          <Text style={Styles.headerText}>Username</Text>
+          <Text style={Styles().headerText}>Username</Text>
         </View>
-        <Text style={Styles.bodyText}>{login}</Text>
+        <Text style={Styles().bodyText}>{login}</Text>
       </View>
-      <View style={Styles.boxContainer}>
+      <View style={Styles(height).boxContainer}>
         <View style={{ marginBottom: 10 }}>
-          <Text style={Styles.headerText}>Mail ID</Text>
+          <Text style={Styles().headerText}>Mail ID</Text>
         </View>
         {email !== null ? (
-          <Text style={Styles.bodyText}>{email}</Text>
+          <Text style={Styles().bodyText}>{email}</Text>
         ) : (
-          <Text style={{ ...Styles.bodyText, ...Styles.noTextValue }}>
+          <Text style={{ ...Styles().bodyText, ...Styles().noTextValue }}>
             No mail id
           </Text>
         )}
       </View>
-      <View style={Styles.repoOuterBoxContainer}>
-        <View style={Styles.repoCountBoxContainer}>
-          <Text style={Styles.headerText}>Total Repo's</Text>
-          <Text style={Styles.repoCountValue}>{public_repos}</Text>
+      <View style={Styles().repoOuterBoxContainer}>
+        <View style={Styles().repoCountBoxContainer}>
+          <Text style={Styles().headerText}>Total Repo's</Text>
+          <Text style={Styles().repoCountValue}>{public_repos}</Text>
         </View>
         <TouchableOpacity
           onPress={vistRepos}
-          style={Styles.repoVisitBoxContainer}
+          style={Styles().repoVisitBoxContainer}
         >
-          <Text style={{...Styles.headerText, color: 'white'}}>Visit Repo's</Text>
+          <Text style={{ ...Styles().headerText, color: 'white' }}>
+            Visit Repo's
+          </Text>
           <Icon name="chevron-forward-outline" color="white" size={30} />
         </TouchableOpacity>
       </View>
@@ -81,10 +87,10 @@ const GitInfo: React.FC<GitInfoInterface & VisitInterface> = ({
   );
 };
 
-const Styles = StyleSheet.create({
+const Styles = (ht? : number) => StyleSheet.create({
   infoContainer: {
     flex: 1,
-    width: '90%',
+    width: '98%',
     backgroundColor: 'rgba(0,0,0,0.3)',
     borderRadius: 10,
     marginBottom: 10,
@@ -98,9 +104,9 @@ const Styles = StyleSheet.create({
     alignItems: 'center',
   },
   imgContainer: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
+    width: (ht !== undefined && ht < 737 ? 80 : 175),
+    height: (ht !== undefined && ht < 737 ? 80 : 175),
+    borderRadius: 88,
     backgroundColor: 'black',
     overflow: 'hidden',
   },
@@ -125,11 +131,11 @@ const Styles = StyleSheet.create({
   },
   boxContainer: {
     paddingVertical: 10,
-    marginVertical: 10,
+    marginVertical: (ht !== undefined && ht < 737 ? 5 : 10),
     alignItems: 'center',
     justifyContent: 'space-around',
     width: '100%',
-    height: 60,
+    height: (ht !== undefined && ht < 668 ? 60 : 80),
     borderRadius: 5,
     backgroundColor: 'rgba(255,255,255,0.1)',
     shadowColor: Colors.tertiary,

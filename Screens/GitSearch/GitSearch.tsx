@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Alert, Text } from 'react-native';
+import { View, StyleSheet, Alert, Text, useWindowDimensions } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 import Input from '../../Components/UI/Input';
@@ -13,7 +13,10 @@ import {
 } from '../../Interfaces/Interfaces';
 import GitInfo from '../../Components/UI/GitInfo';
 import GitInfoData from '../../Models/GitInfoData';
-import { fetchHistoryData, setHistoryData } from '../../Store/Actions/HistoryAction';
+import {
+  fetchHistoryData,
+  setHistoryData,
+} from '../../Store/Actions/HistoryAction';
 import { useDispatch } from 'react-redux';
 
 interface GitSearchProps {
@@ -30,6 +33,9 @@ const GitSearch: React.FC<GitSearchProps> = ({ navigation }) => {
   const debouncedSearchTerm = useDebounce(inputValue, 500);
 
   const dispatch = useDispatch();
+
+  const { width , height } = useWindowDimensions();
+  console.log(width, height); 
 
   useEffect(() => {
     (async () => {
@@ -64,17 +70,23 @@ const GitSearch: React.FC<GitSearchProps> = ({ navigation }) => {
   }, [error]);
 
   const vistRepos = async () => {
-    try{
+    try {
       await dispatch(setHistoryData(gitData));
     } catch (err) {}
 
     navigation.navigate({
       name: 'GitDetail',
       params: {
-        url: gitData.repos_url
+        url: gitData.repos_url,
       },
     });
   };
+
+  let headerStyle = Styles.headerText;
+
+  if(height < 737) {
+    headerStyle = {...Styles.headerText, ...Styles.headerText_h_667}
+  }
 
   return (
     <LinearGradient
@@ -83,7 +95,7 @@ const GitSearch: React.FC<GitSearchProps> = ({ navigation }) => {
     >
       <View style={Styles.searchContainer}>
         <View style={Styles.header}>
-          <Text style={Styles.headerText}>Enter Username:</Text>
+          <Text style={headerStyle}>Enter Username:</Text>
         </View>
         <Input inputValue={inputValue} setInputValue={setInputValue} />
       </View>
@@ -123,20 +135,14 @@ const Styles = StyleSheet.create({
     color: 'white',
     fontSize: 20,
     fontWeight: '600',
+    marginBottom: 10,
+  },
+  headerText_h_667: {
+    fontSize: 16,
   },
   searchContainer: {
-    width: '90%',
-    height: '15%',
-    backgroundColor: 'rgba(0,0,0,0.2)',
-    marginVertical: 10,
-    borderRadius: 10,
-    paddingHorizontal: 15,
-    shadowColor: 'black',
-    shadowOpacity: 0.8,
-    shadowRadius: 10,
-    shadowOffset: { width: 5, height: 5 },
-    elevation: 10,
-    justifyContent: 'space-evenly',
+    width: '80%',
+    marginVertical: 10
   },
 });
 
