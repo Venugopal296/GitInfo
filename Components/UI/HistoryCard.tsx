@@ -1,19 +1,14 @@
 import React from 'react';
 import {
-  TouchableOpacity,
-  View,
-  StyleSheet,
-  Text,
-  Image,
-  Alert,
+  Image, StyleSheet,
+  Text, TouchableOpacity,
+  View
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Swipeout from 'react-native-swipeout';
 import { useDispatch } from 'react-redux';
-
-import { GitInfoInterface } from '../../Interfaces/Interfaces';
 import Colors from '../../Constants/Colors';
-import { deleteSingleUser } from '../../Store/Actions/HistoryAction';
+import { GitInfoInterface } from '../../Interfaces/Interfaces';
+
 
 interface HistoryParams {
   detailRepo: () => void;
@@ -23,42 +18,8 @@ const HistoryCard: React.FC<GitInfoInterface & HistoryParams> = props => {
   const { avatar_url, name, login, detailRepo } = props;
   const dispatch = useDispatch();
 
-  const deleteEntry = async () => {
-    Alert.alert('Caution!', 'Are you sure want to delete', [
-      { text: 'No', style: 'default' },
-      {
-        text: 'Yes',
-        style: 'destructive',
-        onPress: async () => {
-          try {
-            await dispatch(deleteSingleUser(login));
-          } catch (err) {}
-        },
-      },
-    ]);
-  };
-
-  const swipeoutBtns = [
-    {
-      // onPress={() => {}},
-      backgroundColor: 'white',
-      sensitivity: 100,
-      underlayColor: 'rgba(255, 255, 255, 0.8)',
-      component: (
-        <Icon
-          name="trash"
-          color={Colors.primary}
-          size={35}
-          style={Styles.swipeIcon}
-          onPress={deleteEntry}
-        />
-      ),
-      // onPress={deleteEntry}
-    },
-  ];
-
   return (
-    <Swipeout style={Styles.swipeBox} right={swipeoutBtns}>
+    <View style={Styles.swipeBox}>
       <TouchableOpacity
         style={Styles.card}
         activeOpacity={0.6}
@@ -98,7 +59,7 @@ const HistoryCard: React.FC<GitInfoInterface & HistoryParams> = props => {
           <Icon name="chevron-forward-outline" color="white" size={30} />
         </View>
       </TouchableOpacity>
-    </Swipeout>
+    </View>
   );
 };
 
@@ -106,18 +67,14 @@ const Styles = StyleSheet.create({
   swipeBox: {
     flex: 1,
     height: 80,
-    marginBottom: 10,
     backgroundColor: 'rgba(0,0,0,0)',
-    borderRadius: 10,
     display: 'flex',
     justifyContent: 'center',
   },
   card: {
     width: '100%',
     height: '100%',
-    marginBottom: 10,
     backgroundColor: 'rgba(0,0,0,0.4)',
-    borderRadius: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -125,6 +82,9 @@ const Styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 1,
     shadowOffset: { width: 1, height: 1 },
+    borderBottomColor: '#686868',
+    borderBottomWidth: 1,
+    borderStyle: 'solid',
   },
   mainContainer: {
     flexDirection: 'row',

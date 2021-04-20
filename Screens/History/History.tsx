@@ -1,18 +1,20 @@
+import { StackNavigationProp } from '@react-navigation/stack';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect } from 'react';
-import { FlatList, Text, View, StyleSheet, Alert } from 'react-native';
+import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { useDispatch, useSelector } from 'react-redux';
+import AppleStyleSwipeableRow from '../../Components/UI/AppleStyleSwipeableRow';
+import CustomHeaderButton from '../../Components/UI/HeaderButton';
+import HistoryCard from '../../Components/UI/HistoryCard';
 import Colors from '../../Constants/Colors';
 import {
   GitInfoInterface,
-  HistoryNavigatorParamList,
+  HistoryNavigatorParamList
 } from '../../Interfaces/Interfaces';
-import HistoryCard from '../../Components/UI/HistoryCard';
-import { useDispatch, useSelector } from 'react-redux';
+import { deleteHistoryData, deleteSingleUser } from '../../Store/Actions/HistoryAction';
 import { HistoryInitStateInterface } from '../../Store/Reducers/HistoryReducers';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import CustomHeaderButton from '../../Components/UI/HeaderButton';
-import { deleteHistoryData } from '../../Store/Actions/HistoryAction';
+
 
 interface GitSearchProps {
   navigation: StackNavigationProp<HistoryNavigatorParamList, 'History'>;
@@ -29,7 +31,7 @@ const History: React.FC<GitSearchProps> = ({ navigation }) => {
       headerRight: () => (
         <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
           <Item
-            title="Clear History"
+            title='Clear History'
             onPress={clearHistory}
             color={Colors.primary}
           />
@@ -53,8 +55,27 @@ const History: React.FC<GitSearchProps> = ({ navigation }) => {
     ]);
   };
 
+  const deleteEntry = async (login: string) => {
+    Alert.alert('Caution!', 'Are you sure want to delete', [
+      { text: 'No', style: 'default' },
+      {
+        text: 'Yes',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await dispatch(deleteSingleUser(login));
+          } catch (err) {}
+        },
+      },
+    ]);
+  };
+
   const renderItem = ({ item }: { item: GitInfoInterface }) => (
-    <HistoryCard {...item} detailRepo={() => vistRepos(item)} />
+    // <GmailStyleSwipeableRow>
+    <AppleStyleSwipeableRow deleteEntry={() => deleteEntry(item.login)}>
+      <HistoryCard {...item} detailRepo={() => vistRepos(item)} />
+    </AppleStyleSwipeableRow>
+    // </GmailStyleSwipeableRow>
   );
 
   const vistRepos = (item: GitInfoInterface) => {
@@ -93,7 +114,6 @@ const Styles = StyleSheet.create({
   },
   detail: {
     flex: 1,
-    padding: 10,
   },
   textBox: {
     flex: 1,
